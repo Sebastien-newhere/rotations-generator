@@ -270,6 +270,8 @@
 
   <button class="btn btn-primary" onclick="generate()" style="margin-bottom:14px">Générer les rotations</button>
 
+  <button class="btn btn-secondary" id="resumeBtn" onclick="resumeRotations()" style="display:none;margin-bottom:14px">Reprendre les rotations existantes</button>
+
 </div>
 
 <!-- ÉCRAN 2 : ROTATIONS -->
@@ -315,7 +317,8 @@
       <button class="btn btn-secondary" onclick="exportPDF()">Imprimer / PDF</button>
     </div>
     <button class="btn btn-rose" onclick="openLateModal()" style="margin-top:10px">+ Ajouter un retardataire</button>
-    <button class="btn btn-secondary" onclick="backToSetup()" style="margin-top:10px">Nouvelle soirée</button>
+    <button class="btn btn-secondary" onclick="backToSetup()" style="margin-top:10px">Modifier les paramètres</button>
+    <button class="btn btn-ghost" onclick="newSession()" style="margin-top:6px;color:#c94b4b">Nouvelle soirée (effacer tout)</button>
   </div>
 
   <div id="tab-individual" style="display:none">
@@ -443,6 +446,21 @@ function refreshSetup() {
   document.getElementById('duration').textContent = state.duration;
   renderCompositions();
   renderParticipants();
+
+  // Afficher le bouton "Reprendre" si des rotations existent
+  const resumeBtn = document.getElementById('resumeBtn');
+  if (resumeBtn) {
+    if (state.rotations && state.rotations.length > 0) {
+      resumeBtn.style.display = 'flex';
+      // Renommer le bouton principal pour être clair
+      const genBtn = document.querySelector('button[onclick="generate()"]');
+      if (genBtn) genBtn.textContent = 'Générer DE NOUVELLES rotations';
+    } else {
+      resumeBtn.style.display = 'none';
+      const genBtn = document.querySelector('button[onclick="generate()"]');
+      if (genBtn) genBtn.textContent = 'Générer les rotations';
+    }
+  }
 }
 
 // ============ COMPOSITIONS DE TABLES ============
@@ -830,6 +848,11 @@ function coverageOf(metCount, n) {
 }
 
 function generate() {
+  // Si des rotations existent déjà, demander confirmation
+  if (state.rotations && state.rotations.length > 0) {
+    if (!confirm('Cela va remplacer les rotations actuelles. Continuer ?')) return;
+  }
+
   const comp = buildComposition();
   state.latecomers = new Set();
   state.regenCount = 1;
@@ -848,6 +871,13 @@ function generate() {
   state.bestCoverage = best.cov;
   state.currentRound = 0;
   saveState();
+  showScreen('rotations');
+  renderRotations();
+}
+
+function resumeRotations() {
+  // Reprendre les rotations existantes (sans rien régénérer)
+  if (!state.rotations || state.rotations.length === 0) return;
   showScreen('rotations');
   renderRotations();
 }
@@ -1236,6 +1266,26 @@ function backToSetup() {
   if (state.timer.running) stopTimer();
   document.getElementById('timerBar').classList.add('hidden');
   document.body.classList.remove('timer-active');
+  refreshSetup(); // pour mettre à jour l'affichage du bouton Reprendre
+  showScreen('setup');
+}
+
+function newSession() {
+  if (!confirm('Effacer toutes les rotations et repartir de zéro ? (Les paramètres et prénoms sont conservés.)')) return;
+  if (state.timer.running) stopTimer();
+  document.getElementById('timerBar').classList.add('hidden');
+  document.body.classList.remove('timer-active');
+  state.rotations = [];
+  state.latecomers = new Set();
+  state.currentRound = 0;
+  state.regenCount = 1;
+  state.bestCoverage = 0;
+  state.selectedPerson = null;
+  // Retirer les retardataires (s'ils existent) en restaurant nParticipants
+  // (les retardataires sont les IDs > au nombre initial; mais on n'a pas tracké le nombre initial)
+  // Pour simplicité : on ne touche pas à nParticipants ni names, l'utilisateur gère via setup
+  saveState();
+  refreshSetup();
   showScreen('setup');
 }
 
@@ -1243,9 +1293,8 @@ function backToSetup() {
 loadState();
 refreshSetup();
 
-// Si on a déjà des rotations sauvées, proposer de reprendre
+// Si on a déjà des rotations sauvées, recalculer metCount et aller directement à la vue rotations
 if (state.rotations && state.rotations.length > 0) {
-  // recalculer metCount à partir des rotations sauvées
   const metCount = Array.from({length: state.nParticipants+1}, () => new Array(state.nParticipants+1).fill(0));
   state.rotations.forEach(round => {
     round.forEach(table => {
@@ -1258,6 +1307,11 @@ if (state.rotations && state.rotations.length > 0) {
     });
   });
   state.metCount = metCount;
+  state.bestCoverage = coverageOf(metCount, state.nParticipants);
+
+  // Aller directement à la vue rotations (et non plus rester sur setup)
+  showScreen('rotations');
+  renderRotations();
 }
 
 // Empêcher le zoom sur double-tap (iOS)
