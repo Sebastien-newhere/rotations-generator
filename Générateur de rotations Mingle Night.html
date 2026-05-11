@@ -1,0 +1,1272 @@
+<!DOCTYPE html>
+<html lang="fr">
+<head>
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover, user-scalable=no">
+<meta name="theme-color" content="#2A67B9">
+<meta name="apple-mobile-web-app-capable" content="yes">
+<meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<meta name="apple-mobile-web-app-title" content="Mingle">
+<title>Mingle Night — New Here</title>
+
+<link rel="apple-touch-icon" href='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="%232A67B9"/><g fill="none" stroke-width="28" stroke-linecap="round"><circle cx="176" cy="176" r="56" stroke="%23FC8F8E"/><circle cx="336" cy="176" r="56" stroke="%23FD7877"/><circle cx="336" cy="336" r="56" stroke="%234D7FC2"/><circle cx="176" cy="336" r="56" stroke="%23F6F4F0"/><path d="M232 192 Q256 176 280 192" stroke="%23F6F4F0" fill="none"/><path d="M320 232 Q336 256 320 280" stroke="%23F6F4F0" fill="none"/><path d="M280 320 Q256 336 232 320" stroke="%23F6F4F0" fill="none"/><path d="M192 280 Q176 256 192 232" stroke="%23F6F4F0" fill="none"/><path d="M272 196 L280 192 L276 184" stroke="%23F6F4F0"/><path d="M324 272 L320 280 L328 284" stroke="%23F6F4F0"/><path d="M240 324 L232 320 L236 328" stroke="%23F6F4F0"/><path d="M188 240 L192 232 L184 228" stroke="%23F6F4F0"/></g></svg>'>
+<link rel="icon" type="image/svg+xml" href='data:image/svg+xml;utf8,<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 512 512"><rect width="512" height="512" rx="112" fill="%232A67B9"/><g fill="none" stroke-width="28" stroke-linecap="round"><circle cx="176" cy="176" r="56" stroke="%23FC8F8E"/><circle cx="336" cy="176" r="56" stroke="%23FD7877"/><circle cx="336" cy="336" r="56" stroke="%234D7FC2"/><circle cx="176" cy="336" r="56" stroke="%23F6F4F0"/></g></svg>'>
+
+<style>
+  :root{
+    --rose:#FC8F8E;
+    --rose-2:#FD7877;
+    --bleu:#2A67B9;
+    --bleu-2:#4D7FC2;
+    --gris:#F6F4F0;
+    --ink:#0F1E3A;
+    --ink-soft:#3a4a6a;
+    --white:#ffffff;
+    --shadow:0 8px 24px rgba(42,103,185,.12);
+    --shadow-lg:0 16px 48px rgba(42,103,185,.18);
+    --radius:18px;
+  }
+  *{box-sizing:border-box;-webkit-tap-highlight-color:transparent}
+  html,body{margin:0;padding:0;background:var(--gris);color:var(--ink);font-family:-apple-system,BlinkMacSystemFont,"Segoe UI",Roboto,sans-serif;overscroll-behavior:none}
+  body{padding:env(safe-area-inset-top) env(safe-area-inset-right) env(safe-area-inset-bottom) env(safe-area-inset-left);min-height:100vh}
+  h1,h2,h3{font-family:Georgia,"Times New Roman",serif;font-weight:600;letter-spacing:-.5px;margin:0}
+  button{font-family:inherit;cursor:pointer;border:none}
+
+  /* HEADER */
+  .app-header{position:sticky;top:0;background:var(--bleu);color:var(--white);padding:14px 18px;display:flex;align-items:center;gap:12px;z-index:10;box-shadow:0 2px 12px rgba(0,0,0,.08)}
+  .app-header .logo{width:36px;height:36px;flex-shrink:0}
+  .app-header h1{font-size:18px;font-weight:600;color:var(--white)}
+  .app-header .sub{font-size:11px;opacity:.7;text-transform:uppercase;letter-spacing:1.5px;margin-top:2px}
+
+  /* SCREEN */
+  .screen{display:none;padding:18px;max-width:600px;margin:0 auto}
+  .screen.active{display:block}
+
+  /* CARDS */
+  .card{background:var(--white);border-radius:var(--radius);padding:20px;margin-bottom:14px;box-shadow:var(--shadow)}
+  .card h2{font-size:20px;margin-bottom:6px;color:var(--bleu)}
+  .card .hint{color:var(--ink-soft);font-size:13px;margin-bottom:14px;line-height:1.5}
+
+  /* FORM */
+  label{display:block;font-size:13px;font-weight:600;color:var(--ink-soft);margin-bottom:6px;text-transform:uppercase;letter-spacing:.5px}
+  input[type=number],input[type=text],textarea,select{width:100%;padding:14px;border:2px solid #e5e9f0;border-radius:12px;font-size:16px;font-family:inherit;background:var(--white);color:var(--ink);transition:border-color .2s}
+  input:focus,textarea:focus,select:focus{outline:none;border-color:var(--bleu-2)}
+  textarea{min-height:120px;resize:vertical}
+  .field{margin-bottom:16px}
+  .row{display:grid;grid-template-columns:1fr 1fr;gap:12px}
+
+  /* BUTTONS */
+  .btn{display:inline-flex;align-items:center;justify-content:center;gap:8px;padding:14px 20px;border-radius:12px;font-size:15px;font-weight:600;letter-spacing:.3px;transition:transform .15s,box-shadow .15s;width:100%}
+  .btn:active{transform:scale(.97)}
+  .btn-primary{background:var(--bleu);color:var(--white);box-shadow:0 4px 12px rgba(42,103,185,.3)}
+  .btn-secondary{background:var(--gris);color:var(--bleu);border:2px solid var(--bleu)}
+  .btn-rose{background:var(--rose);color:var(--white);box-shadow:0 4px 12px rgba(252,143,142,.4)}
+  .btn-ghost{background:transparent;color:var(--bleu);padding:10px 14px}
+  .btn-small{padding:10px 14px;font-size:14px;width:auto}
+  .btn-group{display:flex;gap:10px;margin-top:10px}
+  .btn-group .btn{flex:1}
+
+  /* PARTICIPANTS */
+  .participants-list{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+  .participant{display:flex;align-items:center;gap:12px;background:var(--gris);padding:12px;border-radius:12px}
+  .badge{width:36px;height:36px;border-radius:50%;background:var(--bleu);color:var(--white);display:flex;align-items:center;justify-content:center;font-weight:700;font-size:14px;flex-shrink:0}
+  .badge.r{background:var(--rose)}
+  .badge.r2{background:var(--rose-2)}
+  .badge.b2{background:var(--bleu-2)}
+  .participant input{border:none;background:transparent;padding:8px;font-size:15px;flex:1}
+  .participant input:focus{background:var(--white)}
+  .participant .del{background:transparent;color:#c94b4b;font-size:20px;padding:4px 10px}
+
+  .counter{display:flex;align-items:center;justify-content:space-between;background:var(--gris);padding:8px;border-radius:12px;margin-top:6px}
+  .counter button{width:44px;height:44px;border-radius:10px;background:var(--white);color:var(--bleu);font-size:22px;font-weight:700;box-shadow:var(--shadow)}
+  .counter .val{font-size:24px;font-weight:700;font-family:Georgia,serif;color:var(--bleu)}
+
+  /* STATS */
+  .stats{display:grid;grid-template-columns:repeat(3,1fr);gap:10px;margin-bottom:14px}
+  .stat{background:var(--white);padding:14px 8px;border-radius:14px;text-align:center;box-shadow:var(--shadow)}
+  .stat .v{font-size:22px;font-weight:700;color:var(--bleu);font-family:Georgia,serif}
+  .stat .l{font-size:10px;text-transform:uppercase;letter-spacing:1px;color:var(--ink-soft);margin-top:2px}
+
+  /* ROUND VIEW */
+  .round-nav{display:flex;align-items:center;justify-content:space-between;background:var(--white);padding:14px;border-radius:var(--radius);box-shadow:var(--shadow);margin-bottom:14px}
+  .round-nav button{width:44px;height:44px;border-radius:10px;background:var(--bleu);color:var(--white);font-size:20px}
+  .round-nav button:disabled{background:#cdd4e0}
+  .round-title{text-align:center}
+  .round-title .num{font-size:11px;text-transform:uppercase;letter-spacing:2px;color:var(--ink-soft)}
+  .round-title .big{font-size:24px;font-weight:700;color:var(--bleu);font-family:Georgia,serif}
+
+  /* TABLES GRID */
+  .tables{display:grid;grid-template-columns:1fr;gap:12px}
+  .table-card{background:var(--white);border-radius:var(--radius);padding:16px;box-shadow:var(--shadow);border-left:5px solid var(--rose)}
+  .table-card:nth-child(4n+2){border-left-color:var(--bleu-2)}
+  .table-card:nth-child(4n+3){border-left-color:var(--rose-2)}
+  .table-card:nth-child(4n+4){border-left-color:var(--bleu)}
+  .table-card h3{font-size:16px;color:var(--bleu);margin-bottom:10px;display:flex;align-items:center;gap:8px}
+  .table-card h3 .n{display:inline-flex;width:28px;height:28px;background:var(--bleu);color:var(--white);border-radius:8px;align-items:center;justify-content:center;font-size:14px;font-family:inherit}
+  .members{display:flex;flex-wrap:wrap;gap:6px}
+  .member{background:var(--gris);padding:6px 12px;border-radius:20px;font-size:14px;display:flex;align-items:center;gap:6px}
+  .member .mb{display:inline-flex;width:22px;height:22px;background:var(--bleu);color:var(--white);border-radius:50%;align-items:center;justify-content:center;font-size:11px;font-weight:700}
+
+  /* TIMER */
+  .timer-bar{position:fixed;bottom:0;left:0;right:0;background:var(--white);padding:14px 18px env(safe-area-inset-bottom);box-shadow:0 -4px 20px rgba(0,0,0,.08);display:flex;align-items:center;gap:12px;z-index:20}
+  .timer-bar.hidden{display:none}
+  body.timer-active .screen{padding-bottom:110px}
+  .timer-display{font-family:Georgia,serif;font-size:30px;font-weight:700;color:var(--bleu);min-width:80px;text-align:center}
+  .timer-display.warning{color:var(--rose-2);animation:pulse .8s infinite}
+  @keyframes pulse{0%,100%{opacity:1}50%{opacity:.5}}
+  .timer-bar .btn-small{flex:1}
+
+  /* INDIVIDUAL VIEW */
+  .person-card{background:var(--white);border-radius:var(--radius);padding:24px;box-shadow:var(--shadow-lg);margin-bottom:14px;text-align:center}
+  .person-card .big-badge{width:80px;height:80px;border-radius:50%;background:var(--bleu);color:var(--white);font-size:32px;font-weight:700;display:inline-flex;align-items:center;justify-content:center;margin-bottom:12px;box-shadow:0 8px 24px rgba(42,103,185,.3)}
+  .person-card .name{font-size:24px;font-family:Georgia,serif;color:var(--ink);margin-bottom:4px}
+  .person-card .meta{font-size:13px;color:var(--ink-soft);text-transform:uppercase;letter-spacing:1px}
+  .rounds-list{display:grid;gap:10px}
+  .round-item{background:var(--white);padding:14px;border-radius:12px;box-shadow:var(--shadow);display:flex;align-items:center;justify-content:space-between}
+  .round-item .lbl{font-size:11px;text-transform:uppercase;letter-spacing:1.5px;color:var(--ink-soft)}
+  .round-item .tbl{font-size:18px;font-weight:700;color:var(--bleu);font-family:Georgia,serif;margin-top:2px}
+  .round-item .with{font-size:13px;color:var(--ink);margin-top:4px}
+
+  /* TABS */
+  .tabs{display:flex;background:var(--white);border-radius:12px;padding:4px;margin-bottom:14px;box-shadow:var(--shadow)}
+  .tab{flex:1;padding:10px;text-align:center;font-size:13px;font-weight:600;color:var(--ink-soft);border-radius:8px;transition:all .2s;background:transparent}
+  .tab.active{background:var(--bleu);color:var(--white)}
+
+  /* MODAL */
+  .modal-bg{position:fixed;inset:0;background:rgba(15,30,58,.6);display:none;align-items:flex-end;z-index:50;padding:0}
+  .modal-bg.active{display:flex}
+  .modal{background:var(--white);width:100%;border-radius:24px 24px 0 0;padding:24px 20px env(safe-area-inset-bottom);max-height:80vh;overflow-y:auto;animation:slideUp .25s ease-out}
+  @keyframes slideUp{from{transform:translateY(100%)}to{transform:translateY(0)}}
+  .modal h3{font-size:20px;color:var(--bleu);margin-bottom:8px}
+
+  /* SELECTOR */
+  .person-selector{display:grid;grid-template-columns:repeat(4,1fr);gap:8px;margin-top:10px}
+  .ps-btn{aspect-ratio:1;background:var(--gris);border-radius:12px;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:6px;color:var(--ink);font-size:11px;line-height:1.1;text-align:center;overflow:hidden}
+  .ps-btn .num{font-size:18px;font-weight:700;font-family:Georgia,serif;color:var(--bleu)}
+  .ps-btn .nm{font-size:10px;color:var(--ink-soft);max-width:100%;overflow:hidden;text-overflow:ellipsis;white-space:nowrap;margin-top:2px}
+  .ps-btn.selected{background:var(--bleu);box-shadow:0 4px 12px rgba(42,103,185,.4);transform:scale(1.05)}
+  .ps-btn.selected .num{color:var(--white)}
+  .ps-btn.selected .nm{color:rgba(255,255,255,.9)}
+  .ps-btn.late{background:linear-gradient(135deg,var(--rose) 0%,var(--rose-2) 100%)}
+  .ps-btn.late .num,.ps-btn.late .nm{color:var(--white)}
+  .ps-btn.late.selected{background:linear-gradient(135deg,#e87574 0%,#e85f5e 100%);box-shadow:0 4px 12px rgba(252,143,142,.5)}
+
+  /* COMPOSITION OPTIONS */
+  .comp-options{display:flex;flex-direction:column;gap:8px;margin-top:10px}
+  .comp-opt{background:var(--gris);border:2px solid transparent;padding:14px;border-radius:12px;display:flex;align-items:center;justify-content:space-between;cursor:pointer;transition:all .15s;width:100%;text-align:left;font-family:inherit;color:var(--ink)}
+  .comp-opt.selected{background:var(--white);border-color:var(--bleu);box-shadow:0 4px 12px rgba(42,103,185,.15)}
+  .comp-opt .desc{font-size:15px;font-weight:600}
+  .comp-opt .detail{font-size:12px;color:var(--ink-soft);margin-top:2px;text-transform:none;letter-spacing:0;font-weight:400}
+  .comp-opt .check{width:24px;height:24px;border-radius:50%;border:2px solid #cdd4e0;display:flex;align-items:center;justify-content:center;flex-shrink:0}
+  .comp-opt.selected .check{background:var(--bleu);border-color:var(--bleu);color:var(--white)}
+  .comp-opt.selected .check::after{content:"✓";font-size:14px;font-weight:700}
+
+  /* LATE BADGE */
+  .late-badge{display:inline-block;background:var(--rose);color:var(--white);font-size:9px;padding:2px 6px;border-radius:8px;text-transform:uppercase;letter-spacing:.5px;margin-left:6px;vertical-align:middle;font-weight:700}
+
+  /* EMPTY STATE */
+  .empty{text-align:center;padding:40px 20px;color:var(--ink-soft)}
+  .empty .ico{font-size:48px;margin-bottom:12px;opacity:.3}
+
+  /* WARNING */
+  .warn{background:#fff4e6;border-left:4px solid #e89c3d;padding:12px;border-radius:8px;font-size:13px;color:#7a5018;margin-bottom:12px;line-height:1.5}
+
+  /* QUALITY METER */
+  .quality{display:flex;align-items:center;gap:10px;background:var(--gris);padding:12px;border-radius:12px;margin-bottom:12px}
+  .quality-bar{flex:1;height:8px;background:#e5e9f0;border-radius:4px;overflow:hidden}
+  .quality-fill{height:100%;border-radius:4px;transition:width .3s}
+  .quality-val{font-weight:700;color:var(--bleu);font-family:Georgia,serif;font-size:15px;min-width:50px;text-align:right}
+
+  /* PRINT */
+  @media print{
+    .app-header,.timer-bar,.btn,.tabs,.modal-bg,.no-print{display:none !important}
+    body{background:white;padding:0}
+    .screen{display:block !important;padding:0}
+    .card,.table-card,.stat,.round-nav{box-shadow:none;border:1px solid #ddd;break-inside:avoid}
+    .tables{grid-template-columns:1fr 1fr}
+    .round-section{break-after:page}
+  }
+</style>
+</head>
+<body>
+
+<header class="app-header">
+  <svg class="logo" viewBox="0 0 512 512">
+    <rect width="512" height="512" rx="112" fill="#FFFFFF" opacity=".15"/>
+    <g fill="none" stroke-width="28" stroke-linecap="round">
+      <circle cx="176" cy="176" r="56" stroke="#FC8F8E"/>
+      <circle cx="336" cy="176" r="56" stroke="#FD7877"/>
+      <circle cx="336" cy="336" r="56" stroke="#4D7FC2"/>
+      <circle cx="176" cy="336" r="56" stroke="#F6F4F0"/>
+    </g>
+  </svg>
+  <div>
+    <h1>Mingle Night</h1>
+    <div class="sub">New Here · Rotations</div>
+  </div>
+</header>
+
+<!-- ÉCRAN 1 : SETUP -->
+<div class="screen active" id="screen-setup">
+
+  <div class="card">
+    <h2>Paramètres</h2>
+    <p class="hint">Configurez votre soirée. Tout reste sur votre téléphone, hors-ligne.</p>
+
+    <div class="field">
+      <label>Nombre de participants</label>
+      <div class="counter">
+        <button onclick="adjustParticipants(-1)">−</button>
+        <span class="val" id="participantCount">8</span>
+        <button onclick="adjustParticipants(1)">+</button>
+      </div>
+    </div>
+
+    <div class="row">
+      <div class="field">
+        <label>Cible / table</label>
+        <div class="counter">
+          <button onclick="adjustField('tableSize',-1)">−</button>
+          <span class="val" id="tableSize">4</span>
+          <button onclick="adjustField('tableSize',1)">+</button>
+        </div>
+      </div>
+      <div class="field">
+        <label>Nb rotations</label>
+        <div class="counter">
+          <button onclick="adjustField('rounds',-1)">−</button>
+          <span class="val" id="rounds">5</span>
+          <button onclick="adjustField('rounds',1)">+</button>
+        </div>
+      </div>
+    </div>
+
+    <div class="field" id="compField">
+      <label>Composition des tables</label>
+      <div class="comp-options" id="compOptions"></div>
+    </div>
+
+    <div class="field">
+      <label>Durée par rotation (min)</label>
+      <div class="counter">
+        <button onclick="adjustField('duration',-1)">−</button>
+        <span class="val" id="duration">7</span>
+        <button onclick="adjustField('duration',1)">+</button>
+      </div>
+    </div>
+  </div>
+
+  <div class="card">
+    <h2>Participants</h2>
+    <p class="hint">Optionnel : ajoutez les prénoms ou laissez les badges numérotés.</p>
+
+    <div class="btn-group">
+      <button class="btn btn-secondary btn-small" onclick="openImport()">Importer liste</button>
+      <button class="btn btn-secondary btn-small" onclick="clearNames()">Effacer prénoms</button>
+    </div>
+
+    <div class="participants-list" id="participantsList"></div>
+  </div>
+
+  <button class="btn btn-primary" onclick="generate()" style="margin-bottom:14px">Générer les rotations</button>
+
+</div>
+
+<!-- ÉCRAN 2 : ROTATIONS -->
+<div class="screen" id="screen-rotations">
+
+  <div class="tabs">
+    <button class="tab active" onclick="setTab('animator')">Vue animateur</button>
+    <button class="tab" onclick="setTab('individual')">Fiche individuelle</button>
+  </div>
+
+  <div id="tab-animator">
+
+    <div class="quality">
+      <div class="quality-bar"><div class="quality-fill" id="qFill"></div></div>
+      <span class="quality-val" id="qVal">—</span>
+    </div>
+
+    <div class="stats">
+      <div class="stat"><div class="v" id="sParticipants">0</div><div class="l">Personnes</div></div>
+      <div class="stat"><div class="v" id="sRounds">0</div><div class="l">Rotations</div></div>
+      <div class="stat"><div class="v" id="sCoverage">0%</div><div class="l">Couverture</div></div>
+    </div>
+
+    <div id="warnBox"></div>
+
+    <button class="btn btn-secondary" onclick="regenerate()" id="regenBtn" style="margin-bottom:14px">
+      Régénérer (essai <span id="regenCount">1</span>)
+    </button>
+
+    <div class="round-nav">
+      <button id="prevBtn" onclick="changeRound(-1)">‹</button>
+      <div class="round-title">
+        <div class="num">Rotation</div>
+        <div class="big" id="currentRoundNum">1 / 5</div>
+      </div>
+      <button id="nextBtn" onclick="changeRound(1)">›</button>
+    </div>
+
+    <div class="tables" id="tablesContainer"></div>
+
+    <div class="btn-group" style="margin-top:18px">
+      <button class="btn btn-secondary" onclick="toggleTimer()" id="timerBtn">Démarrer timer</button>
+      <button class="btn btn-secondary" onclick="exportPDF()">Imprimer / PDF</button>
+    </div>
+    <button class="btn btn-rose" onclick="openLateModal()" style="margin-top:10px">+ Ajouter un retardataire</button>
+    <button class="btn btn-secondary" onclick="backToSetup()" style="margin-top:10px">Nouvelle soirée</button>
+  </div>
+
+  <div id="tab-individual" style="display:none">
+    <div class="card">
+      <h2>Fiche individuelle</h2>
+      <p class="hint">Sélectionnez une personne pour voir son parcours.</p>
+      <div class="person-selector" id="personSelector"></div>
+    </div>
+    <div id="personDetail"></div>
+  </div>
+</div>
+
+<!-- TIMER BAR -->
+<div class="timer-bar hidden" id="timerBar">
+  <div class="timer-display" id="timerDisplay">00:00</div>
+  <button class="btn btn-rose btn-small" onclick="toggleTimer()">Stop</button>
+  <button class="btn btn-secondary btn-small" onclick="resetTimer()">Reset</button>
+</div>
+
+<!-- MODAL IMPORT -->
+<div class="modal-bg" id="importModal" onclick="if(event.target===this)closeImport()">
+  <div class="modal">
+    <h3>Importer une liste</h3>
+    <p class="hint">Un prénom par ligne. Ou collez depuis un email/SMS, séparés par virgules.</p>
+    <textarea id="importText" placeholder="Marie&#10;Thomas&#10;Aisha&#10;Lucas..."></textarea>
+    <div class="btn-group">
+      <button class="btn btn-secondary" onclick="closeImport()">Annuler</button>
+      <button class="btn btn-primary" onclick="doImport()">Importer</button>
+    </div>
+  </div>
+</div>
+
+<!-- MODAL RETARDATAIRE -->
+<div class="modal-bg" id="lateModal" onclick="if(event.target===this)closeLateModal()">
+  <div class="modal">
+    <h3>Ajouter des retardataires</h3>
+    <p class="hint">Ils seront ajoutés aux rotations restantes (y compris l'actuelle), en optimisant les rencontres et l'équilibre des tables.</p>
+    <div class="field">
+      <label>Combien ?</label>
+      <div class="counter">
+        <button onclick="adjustLateCount(-1)">−</button>
+        <span class="val" id="lateCount">1</span>
+        <button onclick="adjustLateCount(1)">+</button>
+      </div>
+    </div>
+    <div class="field">
+      <label>Prénoms (optionnel, un par ligne)</label>
+      <textarea id="lateNames" placeholder="Sophie&#10;Karim..." style="min-height:80px"></textarea>
+    </div>
+    <div class="btn-group">
+      <button class="btn btn-secondary" onclick="closeLateModal()">Annuler</button>
+      <button class="btn btn-primary" onclick="addLatecomers()">Ajouter</button>
+    </div>
+  </div>
+</div>
+
+<script>
+// ============ ÉTAT ============
+const state = {
+  nParticipants: 8,
+  tableSize: 4,
+  rounds: 5,
+  duration: 7,
+  composition: null,  // ex: [4,4] ou [4,3,3]
+  compIndex: 0,       // option de composition choisie
+  names: {},
+  latecomers: new Set(),  // IDs des retardataires
+  rotations: [],
+  currentRound: 0,
+  tab: 'animator',
+  selectedPerson: null,
+  lateCount: 1,
+  regenCount: 1,
+  bestCoverage: 0,
+  timer: { running:false, remaining:0, interval:null, total:0 }
+};
+
+// ============ PERSISTANCE LOCALE ============
+function saveState() {
+  try {
+    const s = {
+      nParticipants: state.nParticipants,
+      tableSize: state.tableSize,
+      rounds: state.rounds,
+      duration: state.duration,
+      composition: state.composition,
+      compIndex: state.compIndex,
+      names: state.names,
+      latecomers: Array.from(state.latecomers),
+      rotations: state.rotations,
+      currentRound: state.currentRound
+    };
+    localStorage.setItem('mingle-state', JSON.stringify(s));
+  } catch(e){}
+}
+function loadState() {
+  try {
+    const raw = localStorage.getItem('mingle-state');
+    if (!raw) return;
+    const s = JSON.parse(raw);
+    if (s.latecomers) s.latecomers = new Set(s.latecomers);
+    else s.latecomers = new Set();
+    Object.assign(state, s);
+  } catch(e){}
+}
+
+// ============ COUNTERS ============
+function adjustParticipants(d) {
+  state.nParticipants = Math.max(2, Math.min(100, state.nParticipants + d));
+  refreshSetup();
+  saveState();
+}
+function adjustField(field, d) {
+  const limits = { tableSize: [2,10], rounds: [1,20], duration: [1,60] };
+  const [min,max] = limits[field];
+  state[field] = Math.max(min, Math.min(max, state[field] + d));
+  refreshSetup();
+  saveState();
+}
+
+function refreshSetup() {
+  document.getElementById('participantCount').textContent = state.nParticipants;
+  document.getElementById('tableSize').textContent = state.tableSize;
+  document.getElementById('rounds').textContent = state.rounds;
+  document.getElementById('duration').textContent = state.duration;
+  renderCompositions();
+  renderParticipants();
+}
+
+// ============ COMPOSITIONS DE TABLES ============
+function computeCompositions(n, target) {
+  // Génère toutes les compositions de n en parts entre 2 et target+1, proches de target
+  const minSize = Math.max(2, target - 1);
+  const maxSize = target + 1;
+  const results = [];
+
+  function helper(remaining, current, minAllowed) {
+    if (remaining === 0) {
+      results.push([...current].sort((a,b)=>b-a));
+      return;
+    }
+    for (let size = Math.min(maxSize, remaining); size >= Math.max(minSize, minAllowed); size--) {
+      if (size === remaining || remaining - size >= minSize) {
+        current.push(size);
+        helper(remaining - size, current, size);
+        current.pop();
+      }
+    }
+  }
+  helper(n, [], minSize);
+
+  // Dédupliquer et trier : préférer ceux qui contiennent le plus de tables de taille cible
+  const unique = [];
+  const seen = new Set();
+  for (const comp of results) {
+    const key = comp.join(',');
+    if (!seen.has(key)) {
+      seen.add(key);
+      unique.push(comp);
+    }
+  }
+
+  // Trier : 1) plus de tables = target en premier, 2) écart-type le plus faible
+  unique.sort((a, b) => {
+    const aTarget = a.filter(s => s === target).length;
+    const bTarget = b.filter(s => s === target).length;
+    if (aTarget !== bTarget) return bTarget - aTarget;
+    const aStd = stdDev(a);
+    const bStd = stdDev(b);
+    return aStd - bStd;
+  });
+
+  return unique.slice(0, 6); // max 6 options pour ne pas surcharger l'UI
+}
+
+function stdDev(arr) {
+  const mean = arr.reduce((s,v)=>s+v,0) / arr.length;
+  return Math.sqrt(arr.reduce((s,v)=>s+(v-mean)**2,0) / arr.length);
+}
+
+function describeComp(comp) {
+  // Grouper par taille : [4,4,3] -> "2× table de 4 + 1× table de 3"
+  const counts = {};
+  comp.forEach(s => counts[s] = (counts[s] || 0) + 1);
+  const sizes = Object.keys(counts).map(Number).sort((a,b)=>b-a);
+  return sizes.map(s => `${counts[s]}× ${s}`).join(' + ');
+}
+
+function renderCompositions() {
+  const compFieldEl = document.getElementById('compField');
+  const compOpts = computeCompositions(state.nParticipants, state.tableSize);
+
+  if (compOpts.length === 0) {
+    compFieldEl.style.display = 'none';
+    state.composition = null;
+    return;
+  }
+
+  // Si index hors limites, reset à 0
+  if (state.compIndex >= compOpts.length) state.compIndex = 0;
+  state.composition = compOpts[state.compIndex];
+
+  // Si une seule option ET qu'elle correspond exactement à la cible (toutes les tables = target), masquer pour ne pas encombrer
+  if (compOpts.length === 1 && compOpts[0].every(s => s === state.tableSize)) {
+    compFieldEl.style.display = 'none';
+    return;
+  }
+
+  compFieldEl.style.display = 'block';
+  const container = document.getElementById('compOptions');
+  container.innerHTML = '';
+  compOpts.forEach((comp, idx) => {
+    const total = comp.reduce((s,v)=>s+v,0);
+    const btn = document.createElement('button');
+    btn.className = 'comp-opt' + (idx === state.compIndex ? ' selected' : '');
+    btn.innerHTML = `
+      <div>
+        <div class="desc">${describeComp(comp)}</div>
+        <div class="detail">${comp.length} table${comp.length>1?'s':''} · ${total} personnes</div>
+      </div>
+      <div class="check"></div>
+    `;
+    btn.onclick = () => { state.compIndex = idx; renderCompositions(); saveState(); };
+    container.appendChild(btn);
+  });
+}
+
+function renderParticipants() {
+  const list = document.getElementById('participantsList');
+  list.innerHTML = '';
+  const palette = ['', 'r', 'r2', 'b2'];
+  for (let i = 1; i <= state.nParticipants; i++) {
+    const row = document.createElement('div');
+    row.className = 'participant';
+    row.innerHTML = `
+      <div class="badge ${palette[i % 4]}">${i}</div>
+      <input type="text" placeholder="Prénom (optionnel)"
+             value="${state.names[i] || ''}"
+             onchange="updateName(${i}, this.value)"
+             oninput="updateName(${i}, this.value)">
+    `;
+    list.appendChild(row);
+  }
+}
+
+function updateName(id, name) {
+  const v = name.trim();
+  if (v) state.names[id] = v;
+  else delete state.names[id];
+  saveState();
+}
+
+function clearNames() {
+  state.names = {};
+  renderParticipants();
+  saveState();
+}
+
+// ============ IMPORT ============
+function openImport() {
+  document.getElementById('importText').value = '';
+  document.getElementById('importModal').classList.add('active');
+}
+function closeImport() {
+  document.getElementById('importModal').classList.remove('active');
+}
+function doImport() {
+  const raw = document.getElementById('importText').value;
+  const items = raw.split(/[\n,;]+/).map(s => s.trim()).filter(s => s.length > 0);
+  if (items.length === 0) { closeImport(); return; }
+
+  state.nParticipants = Math.min(100, Math.max(2, items.length));
+  state.names = {};
+  items.slice(0, state.nParticipants).forEach((name, idx) => {
+    state.names[idx + 1] = name;
+  });
+  closeImport();
+  refreshSetup();
+  saveState();
+}
+
+// ============ GÉNÉRATION DES ROTATIONS ============
+// composition: [4,4,3] = 3 tables de tailles 4,4,3
+function generateRotations(n, composition, nRounds) {
+  const rotations = [];
+  const metCount = Array.from({length: n+1}, () => new Array(n+1).fill(0));
+
+  for (let r = 0; r < nRounds; r++) {
+    let bestTables = null;
+    let bestScore = Infinity;
+
+    const tries = 80;
+    for (let t = 0; t < tries; t++) {
+      const tables = assignRound(n, composition, metCount);
+      const score = evaluateRound(tables, metCount);
+      if (score < bestScore) {
+        bestScore = score;
+        bestTables = tables;
+        if (score === 0) break;
+      }
+    }
+
+    bestTables.forEach(table => {
+      for (let i = 0; i < table.length; i++) {
+        for (let j = i+1; j < table.length; j++) {
+          metCount[table[i]][table[j]]++;
+          metCount[table[j]][table[i]]++;
+        }
+      }
+    });
+
+    rotations.push(bestTables);
+  }
+
+  return { rotations, metCount };
+}
+
+function assignRound(n, composition, metCount) {
+  const ids = Array.from({length: n}, (_, i) => i+1);
+  shuffle(ids);
+
+  const tables = composition.map(() => []);
+  const sizes = [...composition];
+  const remaining = [...ids];
+
+  // Premier participant par table
+  for (let t = 0; t < tables.length && remaining.length > 0; t++) {
+    tables[t].push(remaining.shift());
+  }
+
+  // Placer les autres : minimiser re-rencontres, respecter taille de table
+  while (remaining.length > 0) {
+    const p = remaining.shift();
+    let bestTable = -1;
+    let bestCost = Infinity;
+
+    for (let t = 0; t < tables.length; t++) {
+      if (tables[t].length >= sizes[t]) continue;
+      let cost = 0;
+      for (const member of tables[t]) {
+        cost += metCount[p][member];
+      }
+      cost += tables[t].length * 0.01;
+      if (cost < bestCost) {
+        bestCost = cost;
+        bestTable = t;
+      }
+    }
+    if (bestTable === -1) {
+      bestTable = tables.reduce((min, t, i) => tables[i].length < tables[min].length ? i : min, 0);
+    }
+    tables[bestTable].push(p);
+  }
+
+  return tables;
+}
+
+function evaluateRound(tables, metCount) {
+  let cost = 0;
+  tables.forEach(table => {
+    for (let i = 0; i < table.length; i++) {
+      for (let j = i+1; j < table.length; j++) {
+        cost += metCount[table[i]][table[j]] * 10;
+        if (metCount[table[i]][table[j]] > 0) cost += 5; // pénalité re-rencontre
+      }
+    }
+  });
+  return cost;
+}
+
+function shuffle(arr) {
+  for (let i = arr.length - 1; i > 0; i--) {
+    const j = Math.floor(Math.random() * (i+1));
+    [arr[i], arr[j]] = [arr[j], arr[i]];
+  }
+}
+
+// ============ COUVERTURE ============
+function computeCoverage(metCount, n) {
+  const totalPairs = n * (n-1) / 2;
+  let met = 0;
+  for (let i = 1; i <= n; i++) {
+    for (let j = i+1; j <= n; j++) {
+      if (metCount[i][j] > 0) met++;
+    }
+  }
+  return { pct: Math.round((met / totalPairs) * 100), met, total: totalPairs };
+}
+
+// ============ RETARDATAIRES ============
+function openLateModal() {
+  state.lateCount = 1;
+  document.getElementById('lateCount').textContent = '1';
+  document.getElementById('lateNames').value = '';
+  document.getElementById('lateModal').classList.add('active');
+}
+function closeLateModal() {
+  document.getElementById('lateModal').classList.remove('active');
+}
+function adjustLateCount(d) {
+  state.lateCount = Math.max(1, Math.min(20, state.lateCount + d));
+  document.getElementById('lateCount').textContent = state.lateCount;
+}
+function addLatecomers() {
+  const count = state.lateCount;
+  const namesRaw = document.getElementById('lateNames').value;
+  const namesList = namesRaw.split(/[\n,;]+/).map(s => s.trim()).filter(s => s.length > 0);
+
+  const startId = state.nParticipants + 1;
+  const newIds = [];
+  for (let i = 0; i < count; i++) {
+    const id = startId + i;
+    newIds.push(id);
+    state.latecomers.add(id);
+    if (namesList[i]) state.names[id] = namesList[i];
+  }
+  state.nParticipants += count;
+
+  // Ajouter les retardataires aux rotations restantes (à partir du round courant)
+  for (let r = state.currentRound; r < state.rotations.length; r++) {
+    addLatecomersToRound(state.rotations[r], newIds, r);
+  }
+
+  // Recalculer metCount complet
+  state.metCount = rebuildMetCount(state.rotations, state.nParticipants);
+
+  closeLateModal();
+  saveState();
+  renderRotations();
+}
+
+function addLatecomersToRound(tables, newIds, roundIdx) {
+  // Stratégie : on insère chaque retardataire à la table où il rencontre le plus de gens qu'il n'a pas encore rencontrés,
+  // en respectant un équilibre de taille (max écart = 1 par rapport au min).
+  // metCount partiel : reconstruit jusqu'au round courant pour ce participant
+  const partialMet = rebuildMetCount(state.rotations.slice(0, roundIdx), state.nParticipants);
+
+  for (const newId of newIds) {
+    // Trouver la table où l'ajouter
+    const tableSizes = tables.map(t => t.length);
+    const minSize = Math.min(...tableSizes);
+    // Tables candidates : celles qui ne dépassent pas trop la moyenne
+    let bestTable = -1;
+    let bestScore = -Infinity;
+
+    for (let t = 0; t < tables.length; t++) {
+      // Pénalité si la table est déjà trop grosse (>= max + 1 vs min)
+      const sizePenalty = (tables[t].length - minSize) * 100;
+      // Bonus : combien de NOUVELLES rencontres ce placement apporte
+      let newMeetings = 0;
+      for (const member of tables[t]) {
+        if (partialMet[newId][member] === 0) newMeetings++;
+      }
+      const score = newMeetings - sizePenalty;
+      if (score > bestScore) {
+        bestScore = score;
+        bestTable = t;
+      }
+    }
+
+    tables[bestTable].push(newId);
+    // Mettre à jour partialMet pour les retardataires suivants
+    for (const member of tables[bestTable]) {
+      if (member !== newId) {
+        partialMet[newId][member]++;
+        partialMet[member][newId]++;
+      }
+    }
+  }
+}
+
+function rebuildMetCount(rotations, n) {
+  const m = Array.from({length: n+1}, () => new Array(n+1).fill(0));
+  rotations.forEach(round => {
+    round.forEach(table => {
+      for (let i = 0; i < table.length; i++) {
+        for (let j = i+1; j < table.length; j++) {
+          m[table[i]][table[j]]++;
+          m[table[j]][table[i]]++;
+        }
+      }
+    });
+  });
+  return m;
+}
+
+// ============ GÉNÉRATION ============
+function buildComposition() {
+  let comp = state.composition;
+  if (!comp || comp.reduce((s,v)=>s+v,0) !== state.nParticipants) {
+    const ts = state.tableSize;
+    const n = state.nParticipants;
+    comp = [];
+    let rem = n;
+    while (rem >= ts) { comp.push(ts); rem -= ts; }
+    if (rem > 0) {
+      if (rem === 1 && comp.length > 0) { comp[comp.length-1]++; rem = 0; }
+      else if (rem >= 2) comp.push(rem);
+    }
+  }
+  return comp;
+}
+
+function coverageOf(metCount, n) {
+  let met = 0;
+  for (let i = 1; i <= n; i++) {
+    for (let j = i+1; j <= n; j++) {
+      if (metCount[i][j] > 0) met++;
+    }
+  }
+  return met;
+}
+
+function generate() {
+  const comp = buildComposition();
+  state.latecomers = new Set();
+  state.regenCount = 1;
+  state.bestCoverage = 0;
+
+  // Premier essai : on en fait 3 d'un coup pour démarrer avec une bonne base
+  let best = null;
+  for (let i = 0; i < 3; i++) {
+    const r = generateRotations(state.nParticipants, comp, state.rounds);
+    const cov = coverageOf(r.metCount, state.nParticipants);
+    if (!best || cov > best.cov) best = { ...r, cov };
+  }
+
+  state.rotations = best.rotations;
+  state.metCount = best.metCount;
+  state.bestCoverage = best.cov;
+  state.currentRound = 0;
+  saveState();
+  showScreen('rotations');
+  renderRotations();
+}
+
+function regenerate() {
+  // Confirmation si on a déjà des retardataires (sinon ils seraient écrasés)
+  if (state.latecomers.size > 0) {
+    if (!confirm('Régénérer va effacer les retardataires déjà ajoutés. Continuer ?')) return;
+    // On retire les retardataires
+    const lateIds = Array.from(state.latecomers);
+    state.nParticipants -= lateIds.length;
+    lateIds.forEach(id => delete state.names[id]);
+    state.latecomers = new Set();
+  }
+
+  const btn = document.getElementById('regenBtn');
+  btn.disabled = true;
+  btn.style.opacity = '0.6';
+
+  // Petit délai pour que l'UI montre le feedback (sinon ça paraît instantané)
+  setTimeout(() => {
+    const comp = buildComposition();
+    state.regenCount++;
+
+    // On essaie 5 nouvelles configurations et on prend la meilleure entre l'actuelle et les nouvelles
+    let bestNew = null;
+    for (let i = 0; i < 5; i++) {
+      const r = generateRotations(state.nParticipants, comp, state.rounds);
+      const cov = coverageOf(r.metCount, state.nParticipants);
+      if (!bestNew || cov > bestNew.cov) bestNew = { ...r, cov };
+    }
+
+    // On garde la meilleure entre actuelle et nouvelle
+    if (bestNew.cov > state.bestCoverage) {
+      state.rotations = bestNew.rotations;
+      state.metCount = bestNew.metCount;
+      state.bestCoverage = bestNew.cov;
+      // Feedback visuel : flash vert
+      flashQuality('improved');
+    } else {
+      flashQuality('same');
+    }
+
+    state.currentRound = 0;
+    saveState();
+    renderRotations();
+    btn.disabled = false;
+    btn.style.opacity = '1';
+  }, 50);
+}
+
+function flashQuality(type) {
+  const fill = document.getElementById('qFill');
+  const original = fill.style.background;
+  fill.style.background = type === 'improved' ? '#4ab87a' : '#e89c3d';
+  fill.style.transition = 'background .3s';
+  setTimeout(() => { fill.style.background = original; }, 800);
+}
+
+// ============ AFFICHAGE ROTATIONS ============
+function showScreen(name) {
+  document.querySelectorAll('.screen').forEach(s => s.classList.remove('active'));
+  document.getElementById('screen-' + name).classList.add('active');
+}
+
+function setTab(name) {
+  state.tab = name;
+  document.querySelectorAll('.tab').forEach(t => t.classList.remove('active'));
+  document.querySelectorAll('.tab')[name === 'animator' ? 0 : 1].classList.add('active');
+  document.getElementById('tab-animator').style.display = name === 'animator' ? 'block' : 'none';
+  document.getElementById('tab-individual').style.display = name === 'individual' ? 'block' : 'none';
+  if (name === 'individual') {
+    renderPersonSelector();
+    // Si une personne était sélectionnée, redessiner sa fiche
+    if (state.selectedPerson) {
+      const detail = document.getElementById('personDetail');
+      if (detail && !detail.innerHTML.trim()) selectPerson(state.selectedPerson);
+    }
+  }
+}
+
+function nameFor(id) {
+  return state.names[id] || `#${id}`;
+}
+
+function renderRotations() {
+  const cov = computeCoverage(state.metCount, state.nParticipants);
+  document.getElementById('sParticipants').textContent = state.nParticipants;
+  document.getElementById('sRounds').textContent = state.rounds;
+  document.getElementById('sCoverage').textContent = cov.pct + '%';
+  const regenEl = document.getElementById('regenCount');
+  if (regenEl) regenEl.textContent = state.regenCount;
+
+  // Qualité visuelle
+  const qFill = document.getElementById('qFill');
+  qFill.style.width = cov.pct + '%';
+  qFill.style.background = cov.pct >= 90 ? '#4ab87a' : cov.pct >= 70 ? '#FD7877' : '#FC8F8E';
+  document.getElementById('qVal').textContent = `${cov.met}/${cov.total}`;
+
+  // Warning si couverture faible
+  const warnBox = document.getElementById('warnBox');
+  if (cov.pct < 100) {
+    const missing = cov.total - cov.met;
+    warnBox.innerHTML = `<div class="warn">Il manque <strong>${missing} rencontre${missing>1?'s':''}</strong> pour que tout le monde se croise. Augmentez le nombre de rotations ou réduisez la taille des tables.</div>`;
+  } else {
+    warnBox.innerHTML = `<div class="warn" style="background:#e8f5ed;border-color:#4ab87a;color:#1f5e3a">Couverture parfaite : chaque personne en rencontrera au moins une autre toutes les autres.</div>`;
+  }
+
+  renderCurrentRound();
+}
+
+function renderCurrentRound() {
+  const r = state.currentRound;
+  document.getElementById('currentRoundNum').textContent = `${r+1} / ${state.rotations.length}`;
+  document.getElementById('prevBtn').disabled = r === 0;
+  document.getElementById('nextBtn').disabled = r === state.rotations.length - 1;
+
+  const container = document.getElementById('tablesContainer');
+  container.innerHTML = '';
+  state.rotations[r].forEach((table, idx) => {
+    const card = document.createElement('div');
+    card.className = 'table-card';
+    card.innerHTML = `
+      <h3><span class="n">${idx+1}</span> Table ${idx+1} <span style="font-size:12px;color:var(--ink-soft);font-weight:400;margin-left:auto">${table.length} pers.</span></h3>
+      <div class="members">
+        ${table.map(id => {
+          const isLate = state.latecomers.has(id);
+          const mbStyle = isLate ? 'style="background:var(--rose)"' : '';
+          return `<span class="member"><span class="mb" ${mbStyle}>${id}</span>${state.names[id] ? escapeHtml(state.names[id]) : ''}${isLate ? '<span class="late-badge">+</span>' : ''}</span>`;
+        }).join('')}
+      </div>
+    `;
+    container.appendChild(card);
+  });
+}
+
+function escapeHtml(s) {
+  return s.replace(/[&<>"']/g, c => ({'&':'&amp;','<':'&lt;','>':'&gt;','"':'&quot;',"'":'&#39;'}[c]));
+}
+
+function changeRound(d) {
+  const next = state.currentRound + d;
+  if (next < 0 || next >= state.rotations.length) return;
+  state.currentRound = next;
+  renderCurrentRound();
+  saveState();
+}
+
+// ============ FICHE INDIVIDUELLE ============
+function renderPersonSelector() {
+  const sel = document.getElementById('personSelector');
+  sel.innerHTML = '';
+  for (let i = 1; i <= state.nParticipants; i++) {
+    const btn = document.createElement('button');
+    const isLate = state.latecomers.has(i);
+    const isSelected = state.selectedPerson === i;
+    btn.className = 'ps-btn' + (isLate ? ' late' : '') + (isSelected ? ' selected' : '');
+    btn.innerHTML = `
+      <div class="num">${i}</div>
+      ${state.names[i] ? `<div class="nm">${escapeHtml(state.names[i])}</div>` : ''}
+    `;
+    btn.onclick = () => selectPerson(i);
+    sel.appendChild(btn);
+  }
+}
+
+function selectPerson(id) {
+  state.selectedPerson = id;
+  renderPersonSelector(); // redessine pour appliquer la surbrillance
+  const container = document.getElementById('personDetail');
+
+  // Trouver le parcours
+  const journey = [];
+  state.rotations.forEach((round, rIdx) => {
+    for (let t = 0; t < round.length; t++) {
+      if (round[t].includes(id)) {
+        const others = round[t].filter(x => x !== id);
+        journey.push({ round: rIdx+1, table: t+1, with: others });
+        return;
+      }
+    }
+    // Si la personne n'est pas dans ce round (retardataire arrivé après)
+    journey.push({ round: rIdx+1, table: null, with: [], absent: true });
+  });
+
+  const colorClass = state.latecomers.has(id) ? 'r' : ['', 'r2', 'b2', ''][id % 4];
+  const bgStyle = state.latecomers.has(id)
+    ? 'background:linear-gradient(135deg,var(--rose) 0%,var(--rose-2) 100%)'
+    : (id%4===1?'background:var(--rose)':id%4===2?'background:var(--rose-2)':id%4===3?'background:var(--bleu-2)':'background:var(--bleu)');
+
+  container.innerHTML = `
+    <div class="person-card">
+      <div class="big-badge" style="${bgStyle}">${id}</div>
+      <div class="name">${state.names[id] ? escapeHtml(state.names[id]) : 'Participant ' + id}${state.latecomers.has(id) ? '<span class="late-badge">Retardataire</span>' : ''}</div>
+      <div class="meta">Badge n°${id}</div>
+    </div>
+    <div class="rounds-list">
+      ${journey.map(j => j.absent ? `
+        <div class="round-item" style="opacity:.5">
+          <div>
+            <div class="lbl">Rotation ${j.round}</div>
+            <div class="with" style="font-style:italic">Non présent à cette rotation</div>
+          </div>
+          <div class="tbl">—</div>
+        </div>
+      ` : `
+        <div class="round-item">
+          <div>
+            <div class="lbl">Rotation ${j.round}</div>
+            <div class="with">Avec : ${j.with.map(o => state.names[o] ? `${escapeHtml(state.names[o])} (${o})` : `#${o}`).join(', ')}</div>
+          </div>
+          <div class="tbl">T${j.table}</div>
+        </div>
+      `).join('')}
+    </div>
+  `;
+}
+
+// ============ TIMER ============
+function toggleTimer() {
+  if (state.timer.running) stopTimer();
+  else startTimer();
+}
+
+function startTimer() {
+  const bar = document.getElementById('timerBar');
+  bar.classList.remove('hidden');
+  document.body.classList.add('timer-active');
+  if (state.timer.remaining === 0) {
+    state.timer.remaining = state.duration * 60;
+    state.timer.total = state.duration * 60;
+  }
+  state.timer.running = true;
+  document.getElementById('timerBtn').textContent = 'Arrêter timer';
+  state.timer.interval = setInterval(tick, 1000);
+  updateTimerDisplay();
+}
+
+function stopTimer() {
+  state.timer.running = false;
+  clearInterval(state.timer.interval);
+  document.getElementById('timerBtn').textContent = 'Démarrer timer';
+}
+
+function resetTimer() {
+  stopTimer();
+  state.timer.remaining = state.duration * 60;
+  state.timer.total = state.duration * 60;
+  updateTimerDisplay();
+}
+
+function tick() {
+  state.timer.remaining--;
+  updateTimerDisplay();
+  if (state.timer.remaining <= 0) {
+    stopTimer();
+    vibrate();
+    beep();
+    // Auto-passer au round suivant si possible
+    if (state.currentRound < state.rotations.length - 1) {
+      setTimeout(() => {
+        state.currentRound++;
+        renderCurrentRound();
+        state.timer.remaining = state.duration * 60;
+        state.timer.total = state.duration * 60;
+        updateTimerDisplay();
+        startTimer();
+      }, 1500);
+    } else {
+      document.getElementById('timerDisplay').textContent = 'Fin !';
+    }
+  }
+}
+
+function updateTimerDisplay() {
+  const m = Math.floor(state.timer.remaining / 60);
+  const s = state.timer.remaining % 60;
+  const display = document.getElementById('timerDisplay');
+  display.textContent = `${String(m).padStart(2,'0')}:${String(s).padStart(2,'0')}`;
+  display.classList.toggle('warning', state.timer.remaining <= 30 && state.timer.remaining > 0);
+}
+
+function vibrate() {
+  if (navigator.vibrate) navigator.vibrate([200, 100, 200, 100, 400]);
+}
+
+function beep() {
+  try {
+    const ctx = new (window.AudioContext || window.webkitAudioContext)();
+    [880, 1320, 880].forEach((freq, i) => {
+      const osc = ctx.createOscillator();
+      const gain = ctx.createGain();
+      osc.connect(gain); gain.connect(ctx.destination);
+      osc.frequency.value = freq;
+      gain.gain.setValueAtTime(0.3, ctx.currentTime + i * 0.2);
+      gain.gain.exponentialRampToValueAtTime(0.01, ctx.currentTime + i * 0.2 + 0.18);
+      osc.start(ctx.currentTime + i * 0.2);
+      osc.stop(ctx.currentTime + i * 0.2 + 0.2);
+    });
+  } catch(e){}
+}
+
+// ============ EXPORT PDF ============
+function exportPDF() {
+  // Construire une page imprimable temporaire
+  const printWin = window.open('', '_blank');
+  if (!printWin) {
+    alert('Activez les pop-ups pour exporter en PDF, ou utilisez "Imprimer" depuis le menu de votre navigateur.');
+    return;
+  }
+
+  const cov = computeCoverage(state.metCount, state.nParticipants);
+
+  let html = `<!DOCTYPE html><html><head><meta charset="UTF-8"><title>Mingle Night - New Here</title>
+  <style>
+    body{font-family:-apple-system,sans-serif;color:#0F1E3A;padding:30px;max-width:800px;margin:auto}
+    h1{color:#2A67B9;font-family:Georgia,serif;margin:0 0 4px}
+    .sub{color:#777;font-size:13px;text-transform:uppercase;letter-spacing:2px;margin-bottom:20px}
+    .meta{background:#F6F4F0;padding:14px;border-radius:8px;margin-bottom:24px;font-size:14px;display:flex;gap:20px;flex-wrap:wrap}
+    .meta span{font-weight:600}
+    h2{color:#2A67B9;font-family:Georgia,serif;border-bottom:2px solid #FC8F8E;padding-bottom:6px;margin-top:30px}
+    .tables{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-top:12px}
+    .table{border:1px solid #ddd;border-left:4px solid #FC8F8E;border-radius:8px;padding:12px;page-break-inside:avoid}
+    .table h3{margin:0 0 8px;color:#2A67B9;font-size:15px}
+    .table:nth-child(4n+2){border-left-color:#4D7FC2}
+    .table:nth-child(4n+3){border-left-color:#FD7877}
+    .table:nth-child(4n+4){border-left-color:#2A67B9}
+    .member{display:inline-block;background:#F6F4F0;padding:4px 10px;border-radius:14px;margin:2px;font-size:13px}
+    .member b{color:#2A67B9}
+    .round{page-break-after:auto;margin-bottom:24px}
+    .footer{margin-top:30px;padding-top:16px;border-top:1px solid #eee;font-size:11px;color:#999;text-align:center}
+  </style></head><body>
+    <h1>Mingle Night</h1>
+    <div class="sub">New Here · ${new Date().toLocaleDateString('fr-FR')}</div>
+    <div class="meta">
+      <div><span>${state.nParticipants}</span> participants</div>
+      <div><span>${state.rounds}</span> rotations</div>
+      <div><span>${state.tableSize}</span> par table</div>
+      <div><span>${state.duration}</span> min / rotation</div>
+      <div><span>${cov.pct}%</span> couverture (${cov.met}/${cov.total})</div>
+    </div>`;
+
+  state.rotations.forEach((round, rIdx) => {
+    html += `<div class="round"><h2>Rotation ${rIdx+1}</h2><div class="tables">`;
+    round.forEach((table, tIdx) => {
+      html += `<div class="table"><h3>Table ${tIdx+1}</h3>`;
+      table.forEach(id => {
+        html += `<span class="member"><b>${id}</b>${state.names[id] ? ' · ' + escapeHtml(state.names[id]) : ''}</span>`;
+      });
+      html += `</div>`;
+    });
+    html += `</div></div>`;
+  });
+
+  // Fiches individuelles
+  html += `<h2 style="page-break-before:always">Fiches individuelles</h2>`;
+  for (let id = 1; id <= state.nParticipants; id++) {
+    const journey = state.rotations.map((round, rIdx) => {
+      for (let t = 0; t < round.length; t++) {
+        if (round[t].includes(id)) {
+          return { round: rIdx+1, table: t+1, with: round[t].filter(x => x !== id) };
+        }
+      }
+      return null;
+    });
+    html += `<div style="border:1px solid #ddd;border-radius:8px;padding:14px;margin-bottom:10px;page-break-inside:avoid">
+      <h3 style="margin:0 0 8px;color:#2A67B9;font-family:Georgia,serif">
+        Badge ${id}${state.names[id] ? ' · ' + escapeHtml(state.names[id]) : ''}
+      </h3>
+      <div style="font-size:13px">`;
+    journey.forEach(j => {
+      html += `<div style="margin:4px 0"><b>R${j.round} · Table ${j.table}</b> — avec ${j.with.map(o => state.names[o] ? `${escapeHtml(state.names[o])} (${o})` : `#${o}`).join(', ')}</div>`;
+    });
+    html += `</div></div>`;
+  }
+
+  html += `<div class="footer">Généré par Mingle Night · New Here</div></body></html>`;
+
+  printWin.document.write(html);
+  printWin.document.close();
+  setTimeout(() => printWin.print(), 400);
+}
+
+// ============ NAV ============
+function backToSetup() {
+  if (state.timer.running) stopTimer();
+  document.getElementById('timerBar').classList.add('hidden');
+  document.body.classList.remove('timer-active');
+  showScreen('setup');
+}
+
+// ============ INIT ============
+loadState();
+refreshSetup();
+
+// Si on a déjà des rotations sauvées, proposer de reprendre
+if (state.rotations && state.rotations.length > 0) {
+  // recalculer metCount à partir des rotations sauvées
+  const metCount = Array.from({length: state.nParticipants+1}, () => new Array(state.nParticipants+1).fill(0));
+  state.rotations.forEach(round => {
+    round.forEach(table => {
+      for (let i = 0; i < table.length; i++) {
+        for (let j = i+1; j < table.length; j++) {
+          metCount[table[i]][table[j]]++;
+          metCount[table[j]][table[i]]++;
+        }
+      }
+    });
+  });
+  state.metCount = metCount;
+}
+
+// Empêcher le zoom sur double-tap (iOS)
+let lastTouchEnd = 0;
+document.addEventListener('touchend', (e) => {
+  const now = Date.now();
+  if (now - lastTouchEnd <= 300) e.preventDefault();
+  lastTouchEnd = now;
+}, false);
+</script>
+</body>
+</html>
